@@ -1,0 +1,8 @@
+{
+  "name": "Trung Tâm",
+  "description": "Hệ thống quản lý trung tâm âm nhạc Minh Music đa người dùng với thanh tìm kiếm toàn cục (Global Search) theo tên và mã học viên, giáo viên, lớp học",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
