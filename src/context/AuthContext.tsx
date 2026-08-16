@@ -59,13 +59,32 @@ const LOCAL_STORAGE_ACCOUNTS_KEY = 'minhmusic_user_accounts_v2';
 const LOCAL_STORAGE_CURRENT_USER_KEY = 'minhmusic_current_user_uid_v2';
 const LOCAL_STORAGE_ACTIVE_ROLE_KEY = 'minhmusic_active_role_v2';
 
+const ADMIN_EMAILS = [
+  'minh123tho@gmail.com',
+  'minhmusic1510@gmail.com',
+  'admin@minhmusic.vn',
+  'admin'
+];
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [accounts, setAccounts] = useState<UserAccount[]>(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_ACCOUNTS_KEY);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Merge initial admin accounts if missing
+          const hasMainAdmin = parsed.some(
+            (a: UserAccount) =>
+              a.email.toLowerCase() === 'minh123tho@gmail.com' ||
+              a.username === 'admin' ||
+              a.role === 'ADMIN'
+          );
+          if (!hasMainAdmin) {
+            return [...initialUserAccounts, ...parsed];
+          }
+          return parsed;
+        }
       } catch (e) {
         console.error('Failed to parse accounts from storage', e);
       }
@@ -79,7 +98,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const found = initialUserAccounts.find(a => a.uid === savedUid);
       if (found) return found;
     }
-    // Default to Admin for testing and immediate smooth experience
+    // Default to Admin for seamless experience
     return initialUserAccounts[0]; // Thầy Nguyễn Văn Minh (Admin + Teacher)
   });
 
@@ -157,14 +176,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setCurrentUser(matched);
           } else {
             // New user from Google/Firebase
-            const isDefaultAdmin = fbUser.email === 'minhmusic1510@gmail.com';
+            const isDefaultAdmin = ADMIN_EMAILS.includes(fbUser.email?.toLowerCase() || '');
             const newAcc: UserAccount = {
               uid: fbUser.uid,
               email: fbUser.email || 'user@minhmusic.vn',
               username: (fbUser.email?.split('@')[0] || 'user').toLowerCase(),
-              displayName: fbUser.displayName || fbUser.email?.split('@')[0] || 'Người dùng mới',
+              displayName: fbUser.displayName || fbUser.email?.split('@')[0] || (isDefaultAdmin ? 'Thầy Nguyễn Văn Minh (Admin)' : 'Người dùng mới'),
               role: isDefaultAdmin ? 'ADMIN' : 'STUDENT',
-              roles: isDefaultAdmin ? ['ADMIN'] : ['STUDENT'],
+              roles: isDefaultAdmin ? ['ADMIN', 'TEACHER'] : ['STUDENT'],
               primaryRole: isDefaultAdmin ? 'ADMIN' : 'STUDENT',
               status: isDefaultAdmin ? 'active' : 'pending',
               avatarUrl: fbUser.photoURL || undefined,
@@ -192,10 +211,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const query = emailOrUsername.trim().toLowerCase();
     
     // Check in local accounts by email OR username
-    const found = accounts.find(a => 
+    let found = accounts.find(a => 
       a.email.toLowerCase() === query || 
       (a.username && a.username.toLowerCase() === query)
     );
+
+    // Auto-create/restore admin if logging in with designated admin email
+    if (!found && ADMIN_EMAILS.includes(query)) {
+      found = {
+        uid: 'usr-admin-main',
+        email: query.includes('@') ? query : 'Minh123tho@gmail.com',
+        username: query.includes('@') ? query.split('@')[0] : 'admin',
+        displayName: 'Thầy Nguyễn Văn Minh (Admin)',
+        phone: '0908151088',
+        role: 'ADMIN',
+        roles: ['ADMIN', 'TEACHER'],
+        primaryRole: 'ADMIN',
+        status: 'active',
+        profileCode: 'ADMIN01',
+        profileName: 'Thầy Nguyễn Văn Minh (Admin)',
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        createdAt: '2024-01-01',
+        lastLoginAt: 'Vừa xong',
+        note: 'Tài khoản Quản trị viên cấp cao & Giảng viên chính'
+      };
+      setAccounts(prev => [found!, ...prev]);
+    }
 
     if (!found) {
       return { success: false, error: 'Không tìm thấy tài khoản với Email hoặc Tên đăng nhập này trong hệ thống.' };
@@ -253,20 +294,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setCurrentUser(updated);
         return { success: true };
       } else {
-        const isAdmin = fbUser.email === 'minhmusic1510@gmail.com';
+        const isAdmin = ADMIN_EMAILS.includes(fbUser.email?.toLowerCase() || '');
         const newAcc: UserAccount = {
           uid: fbUser.uid,
           email: fbUser.email || '',
           username: (fbUser.email?.split('@')[0] || 'google_user').toLowerCase(),
-          displayName: fbUser.displayName || 'Người dùng Google',
+          displayName: fbUser.displayName || (isAdmin ? 'Thầy Nguyễn Văn Minh (Admin)' : 'Người dùng Google'),
           role: isAdmin ? 'ADMIN' : 'STUDENT',
-          roles: isAdmin ? ['ADMIN'] : ['STUDENT'],
+          roles: isAdmin ? ['ADMIN', 'TEACHER'] : ['STUDENT'],
           primaryRole: isAdmin ? 'ADMIN' : 'STUDENT',
           status: isAdmin ? 'active' : 'pending',
           avatarUrl: fbUser.photoURL || undefined,
           createdAt: new Date().toISOString().split('T')[0],
           lastLoginAt: 'Vừa xong',
-          note: isAdmin ? 'Quản trị viên hệ thống' : 'Đăng nhập lần đầu qua Google'
+          note: isAdmin ? 'Quản trị viên cấp cao hệ thống' : 'Đăng nhập lần đầu qua Google'
         };
         setAccounts(prev => [newAcc, ...prev]);
         if (isAdmin) {

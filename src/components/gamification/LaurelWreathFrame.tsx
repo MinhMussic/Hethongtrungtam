@@ -128,6 +128,15 @@ export const LaurelWreathFrame: React.FC<LaurelWreathFrameProps> = ({
 
   const uid = `${theme.id}-${rank}-${size}`;
 
+  // Dynamic font sizing for long student names
+  const rawRibbonText = ribbonLabel || studentName.toUpperCase();
+  const textLen = rawRibbonText.length;
+  const calculatedRibbonFontSize = textLen > 24
+    ? Math.max(10, sizeConfig.ribbonFontSize - 3)
+    : textLen > 18
+    ? Math.max(11, sizeConfig.ribbonFontSize - 1.5)
+    : sizeConfig.ribbonFontSize + 1;
+
   return (
     <div className={`relative flex flex-col items-center justify-center select-none ${sizeConfig.containerClass} ${className}`}>
       
@@ -538,22 +547,19 @@ export const LaurelWreathFrame: React.FC<LaurelWreathFrameProps> = ({
               x="200"
               y="336"
               textAnchor="middle"
-              fill="#001bf4"
-              stroke="#FFFFFF"
-              strokeWidth="0.8"
-              fontSize={sizeConfig.ribbonFontSize + 5}
-              fontWeight="bold"
-              fontFamily="'Times New Roman', Times, serif"
-              letterSpacing="1.2"
+              fill={theme.id === 'gold' ? '#2A1200' : theme.id === 'silver' ? '#0F172A' : '#2D0800'}
+              fontSize={calculatedRibbonFontSize + 3}
+              fontWeight="900"
+              fontFamily="system-ui, -apple-system, 'Be Vietnam Pro', 'Montserrat', 'Segoe UI', Roboto, sans-serif"
+              letterSpacing="0.5"
               style={{
-                fontFamily: "'Times New Roman', Times, serif",
-                fontWeight: 'bold',
-                fill: '#001bf4',
-                color: '#001bf4',
-                textTransform: 'uppercase'
+                fontFamily: "system-ui, -apple-system, 'Be Vietnam Pro', 'Montserrat', 'Segoe UI', Roboto, sans-serif",
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                textRendering: 'geometricPrecision'
               }}
             >
-              {theme.defaultRibbon}
+              {rawRibbonText}
             </text>
           </g>
 
@@ -566,9 +572,14 @@ export const LaurelWreathFrame: React.FC<LaurelWreathFrameProps> = ({
             textAnchor="middle"
             fill={theme.subTextFill}
             fontSize={sizeConfig.subTitleFontSize + 3}
-            fontWeight="700"
-            fontFamily="'Montserrat', 'Inter', sans-serif"
-            letterSpacing="0.8"
+            fontWeight="800"
+            fontFamily="system-ui, -apple-system, 'Be Vietnam Pro', 'Montserrat', 'Segoe UI', Roboto, sans-serif"
+            letterSpacing="0.6"
+            style={{
+              fontFamily: "system-ui, -apple-system, 'Be Vietnam Pro', 'Montserrat', 'Segoe UI', Roboto, sans-serif",
+              fontWeight: 800,
+              textRendering: 'geometricPrecision'
+            }}
             filter="drop-shadow(0 2px 4px rgba(0,0,0,0.8))"
           >
             {theme.defaultSubTitle}

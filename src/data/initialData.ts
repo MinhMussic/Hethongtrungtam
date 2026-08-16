@@ -1089,8 +1089,9 @@ export const initialClasses: ClassItem[] = [
 export const initialUserAccounts: UserAccount[] = [
   {
     uid: 'usr-admin-1',
-    email: 'minhmusic1510@gmail.com',
-    displayName: 'Thầy Nguyễn Văn Minh',
+    email: 'Minh123tho@gmail.com',
+    username: 'admin',
+    displayName: 'Thầy Nguyễn Văn Minh (Admin)',
     phone: '0908151088',
     role: 'ADMIN',
     roles: ['ADMIN', 'TEACHER'],
@@ -1103,11 +1104,29 @@ export const initialUserAccounts: UserAccount[] = [
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
     createdAt: '2024-01-01',
     lastLoginAt: 'Vừa xong',
-    note: 'Tài khoản Đa vai trò (ADMIN + TEACHER). Thầy Minh có thể chuyển đổi linh hoạt giữa chế độ Quản trị và Giảng dạy.'
+    note: 'Tài khoản Quản trị viên cấp cao & Giảng viên chính (ADMIN + TEACHER).'
+  },
+  {
+    uid: 'usr-admin-alias',
+    email: 'admin@minhmusic.vn',
+    username: 'admin_sys',
+    displayName: 'Quản trị viên Minh Music',
+    phone: '0908151088',
+    role: 'ADMIN',
+    roles: ['ADMIN'],
+    primaryRole: 'ADMIN',
+    status: 'active',
+    profileCode: 'ADMIN01',
+    profileName: 'Quản trị viên Minh Music',
+    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    createdAt: '2024-01-01',
+    lastLoginAt: 'Vừa xong',
+    note: 'Tài khoản Quản trị viên hệ thống'
   },
   {
     uid: 'usr-teacher-1',
     email: 'huong.tran@minhmusic.vn',
+    username: 'huong.tran',
     displayName: 'Cô Mai Hương',
     phone: '0912345678',
     role: 'TEACHER',

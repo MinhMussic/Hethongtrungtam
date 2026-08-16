@@ -187,6 +187,29 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSwitchToRegister }) => {
           </p>
         </div>
 
+        {/* Admin Quick Credentials Hint Banner */}
+        <div className="p-3 bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl text-xs space-y-1.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 font-bold text-amber-900 dark:text-amber-300">
+              <Shield className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <span>Tài khoản Quản trị viên (Admin)</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIdentifier('Minh123tho@gmail.com');
+                setPassword('admin123');
+              }}
+              className="text-[11px] font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 hover:underline cursor-pointer bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-md transition-colors"
+            >
+              Điền tự động
+            </button>
+          </div>
+          <p className="text-[11px] text-amber-800/80 dark:text-amber-400/80">
+            Email: <code className="font-bold text-amber-950 dark:text-amber-200 font-mono">Minh123tho@gmail.com</code> (hoặc <code className="font-bold font-mono">admin</code>) • MK: <code className="font-bold font-mono">admin123</code>
+          </p>
+        </div>
+
         {/* Error notification */}
         {error && (
           <div className="p-3.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800 rounded-xl text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-start gap-2 animate-in fade-in">

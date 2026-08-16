@@ -235,9 +235,18 @@ export const TopThreeHonorPodium: React.FC<TopThreeHonorPodiumProps> = ({
             />
           </div>
 
-          {/* Student Code & Meta */}
-          <div className="-mt-1">
-            <p className="text-[11px] font-mono text-slate-400">
+          {/* Student Name & Code Prominent Display */}
+          <div className="mt-1 mb-1 text-center">
+            <h3 className={`text-base sm:text-lg font-black tracking-tight font-heading leading-tight ${
+              isRank1 
+                ? 'text-amber-300 drop-shadow-[0_2px_8px_rgba(245,185,45,0.4)]' 
+                : isRank2 
+                ? 'text-slate-100 drop-shadow-[0_2px_8px_rgba(215,228,245,0.4)]' 
+                : 'text-orange-200 drop-shadow-[0_2px_8px_rgba(235,130,60,0.4)]'
+            }`}>
+              {item.studentName}
+            </h3>
+            <p className="text-[11px] font-mono text-slate-400 mt-0.5">
               Mã HV: <strong className="text-slate-200">{item.code || `HV00${rank}`}</strong>
             </p>
           </div>
@@ -711,8 +720,11 @@ export const TopThreeHonorPodium: React.FC<TopThreeHonorPodiumProps> = ({
                   />
                 </div>
 
-                <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                <div className="text-center">
+                  <h4 className="text-lg sm:text-xl font-black text-amber-900 dark:text-amber-200 tracking-tight font-heading uppercase">
+                    {activeCertificateItem.studentName}
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
                     Mã số học viên: <strong className="text-amber-800 dark:text-amber-300">{activeCertificateItem.code}</strong>
                   </p>
                 </div>
